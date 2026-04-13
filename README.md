@@ -30,23 +30,57 @@ uv run python MP-DSC.py
 uv run python scripts/run_experiment.py --module pmsm.papers.preindl_2013_mp_dsc
 ```
 
-## 当前结构
+## 项目结构（当前）
 
-- `src/pmsm/common/`：所有论文共享的基建代码
-- `src/pmsm/papers/`：按论文隔离的复现代码
-- `docs/`：论文原文与推导笔记
-- `tests/`：基础测试
-- `configs/`：论文参数配置
-- `experiments/`：实验说明
-- `results/`：仿真结果输出
-- `scripts/`：通用运行脚本
-
-### 当前首篇论文
-
-- `src/pmsm/papers/preindl_2013_mp_dsc/`：Preindl 2013 MP-DSC
-- `src/pmsm/common/motor_model.py`：PMSM 电机物理本体模型
-- `src/pmsm/common/transforms.py`：Clarke/Park 变换
-- `src/pmsm/common/plot_utils.py`：统一画图工具
+```text
+PMSM_Reproductions/
+├── src/
+│   └── pmsm/
+│       ├── __init__.py
+│       ├── common/
+│       │   ├── __init__.py
+│       │   ├── motor_model.py
+│       │   ├── transforms.py
+│       │   └── plot_utils.py
+│       ├── papers/
+│       │   ├── __init__.py
+│       │   ├── preindl_2013_mp_dsc/
+│       │   │   ├── __init__.py
+│       │   │   ├── controller.py
+│       │   │   ├── simulation.py
+│       │   │   └── README.md
+│       ├── core/
+│       ├── utils/
+│       └── visualization/
+├── docs/
+│   ├── README.md
+│   ├── notes/
+│   │   └── README.md
+│   └── papers/
+│       ├── README.md
+│       ├── preindl_2013_mp_dsc/
+│       │   ├── README.md
+│       │   └── notes.md
+├── configs/
+│   ├── preindl_2013_mp_dsc/
+│   │   └── mp_dsc.toml
+├── experiments/
+│   ├── README.md
+│   ├── preindl_2013_mp_dsc/
+│   │   └── README.md
+├── scripts/
+│   └── run_experiment.py
+├── tests/
+│   ├── README.md
+│   └── test_common.py
+├── MP-DSC.py
+├── pmsm_sim.py
+├── pyproject.toml
+├── uv.lock
+├── README.md
+├── LICENSE
+└── .gitignore
+```
 
 ## 新增论文的建议
 
