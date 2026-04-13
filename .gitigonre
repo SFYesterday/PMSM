@@ -1,0 +1,9 @@
+# Python 缓存
+__pycache__/
+*.pyc
+
+# uv 虚拟环境
+.venv/
+
+# 系统隐藏文件
+.DS_Store
