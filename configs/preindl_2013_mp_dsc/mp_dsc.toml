@@ -1,0 +1,21 @@
+[simulation]
+Ts = 0.0001
+T_sim = 0.4
+Udc = 200.0
+Ir_max = 10.0
+
+[motor]
+Ld = 0.012
+Lq = 0.02
+Rs = 0.636
+psi_pm = 0.088
+p = 5
+J = 0.001
+B_fric = 0.0017
+
+[controller]
+lambda_T = 1.0
+lambda_A = 0.001
+lambda_L = 10000.0
+observer_Lp = 100.0
+observer_Li = 5000.0

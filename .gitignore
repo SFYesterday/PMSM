@@ -1,6 +1,15 @@
 # Python 缓存
 __pycache__/
 *.pyc
+.pytest_cache/
+
+# 构建产物
+build/
+dist/
+*.egg-info/
+
+# 仿真结果
+results/
 
 # uv 虚拟环境
 .venv/
