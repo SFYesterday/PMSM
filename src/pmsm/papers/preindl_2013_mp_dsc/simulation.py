@@ -13,6 +13,8 @@ from .controller import MPDSCController
 
 
 def run_simulation() -> dict[str, np.ndarray]:
+    """运行完整 MP-DSC 仿真并返回关键波形。"""
+
     motor_params = MotorParams()
     controller = MPDSCController(motor_params=motor_params)
 
@@ -29,6 +31,7 @@ def run_simulation() -> dict[str, np.ndarray]:
 
     motor_state = MotorState()
 
+    # 主仿真循环
     for k in range(N_steps):
         w_ref = 0.0 if time[k] < 0.05 else 500.0 * (2 * math.pi / 60)
         load_torque = 0.0 if time[k] < 0.2 else 6.0
@@ -56,6 +59,8 @@ def run_simulation() -> dict[str, np.ndarray]:
 
 
 def main() -> None:
+    """运行仿真并绘图。"""
+
     results = run_simulation()
     plot_mp_dsc_results(
         results["time"],

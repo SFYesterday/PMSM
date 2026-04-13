@@ -18,12 +18,6 @@ uv sync
 uv run pmsm-sim
 ```
 
-也可以直接运行兼容入口：
-
-```bash
-uv run python MP-DSC.py
-```
-
 通用实验脚本也可以这样用：
 
 ```bash
@@ -73,8 +67,6 @@ PMSM_Reproductions/
 ├── tests/
 │   ├── README.md
 │   └── test_common.py
-├── MP-DSC.py
-├── pmsm_sim.py
 ├── pyproject.toml
 ├── uv.lock
 ├── README.md

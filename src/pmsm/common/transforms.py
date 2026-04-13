@@ -8,6 +8,8 @@ import numpy as np
 
 
 def clarke_transform(state: np.ndarray | list[int], u_dc: float) -> tuple[float, float]:
+    """三相开关状态 -> αβ 静止坐标电压。"""
+
     sa, sb, sc = state
     v_alpha = (2.0 / 3.0) * u_dc * (sa - 0.5 * sb - 0.5 * sc)
     v_beta = (2.0 / 3.0) * u_dc * (math.sqrt(3.0) / 2.0 * sb - math.sqrt(3.0) / 2.0 * sc)
@@ -15,6 +17,8 @@ def clarke_transform(state: np.ndarray | list[int], u_dc: float) -> tuple[float,
 
 
 def park_transform(v_alpha: float, v_beta: float, theta_e: float) -> tuple[float, float]:
+    """αβ -> dq 旋转坐标变换。"""
+
     cos_t = math.cos(theta_e)
     sin_t = math.sin(theta_e)
     u_d = v_alpha * cos_t + v_beta * sin_t
@@ -23,5 +27,7 @@ def park_transform(v_alpha: float, v_beta: float, theta_e: float) -> tuple[float
 
 
 def switch_state_to_dq(state: np.ndarray | list[int], u_dc: float, theta_e: float) -> tuple[float, float]:
+    """开关状态直接映射为 dq 轴电压。"""
+
     v_alpha, v_beta = clarke_transform(state, u_dc)
     return park_transform(v_alpha, v_beta, theta_e)

@@ -18,7 +18,6 @@ pmsm-sim = "pmsm.papers.preindl_2013_mp_dsc:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
-py-modules = ["pmsm_sim"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

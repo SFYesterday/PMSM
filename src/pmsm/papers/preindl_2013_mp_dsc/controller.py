@@ -28,6 +28,8 @@ ALLOWED_TRANSITIONS = {
 
 @dataclass(frozen=True)
 class ControllerParams:
+    """MP-DSC 代价函数与观测器参数。"""
+
     lambda_T: float = 1.0
     lambda_A: float = 1e-3
     lambda_L: float = 1e4
@@ -37,6 +39,8 @@ class ControllerParams:
 
 @dataclass
 class ControllerState:
+    """控制器的内部记忆状态。"""
+
     omega_hat: float = 0.0
     tl_hat: float = 0.0
     last_state_idx: int = 0
@@ -46,15 +50,20 @@ class ControllerState:
 
 @dataclass
 class MPDSCController:
+    """Preindl 2013 MP-DSC 控制器。"""
+
     motor_params: MotorParams = field(default_factory=MotorParams)
     controller_params: ControllerParams = field(default_factory=ControllerParams)
     state: ControllerState = field(default_factory=ControllerState)
 
     def step(self, motor_state: MotorState, w_ref: float) -> tuple[float, float, int]:
+        """执行一次控制步，返回 (u_d, u_q, switch_index)。"""
+
         params = self.motor_params
         cparams = self.controller_params
         cstate = self.state
 
+        # 负载观测器更新
         v_p = motor_state.omega_m - cstate.omega_hat
         te_est = electromagnetic_torque(motor_state, params)
         cstate.omega_hat += (
@@ -66,6 +75,7 @@ class MPDSCController:
         cstate.omega_hat = float(np.clip(cstate.omega_hat, -5000.0, 5000.0))
         cstate.tl_hat = float(np.clip(cstate.tl_hat, -100.0, 100.0))
 
+        # 延时补偿：先由上一拍电压估计 k 时刻状态
         omega_e = params.p * motor_state.omega_m
         id_k = motor_state.id + (params.Ts / params.Ld) * (
             cstate.u_d_prev - params.Rs * motor_state.id + omega_e * params.Lq * motor_state.iq
@@ -83,6 +93,7 @@ class MPDSCController:
         best_ud = 0.0
         best_uq = 0.0
 
+        # 仅遍历开关图允许的下一状态
         for idx in ALLOWED_TRANSITIONS[cstate.last_state_idx]:
             state = SWITCH_STATES[idx]
             ud_pred, uq_pred = switch_state_to_dq(state, params.Udc, theta_e)
@@ -98,6 +109,7 @@ class MPDSCController:
             )
             wm_next = wm_k + (params.Ts / params.J) * (te_next - params.B_fric * wm_k - cstate.tl_hat)
 
+            # 数值保护，避免异常值污染寻优
             if not np.isfinite(wm_next) or not np.isfinite(id_next) or not np.isfinite(iq_next):
                 continue
 
