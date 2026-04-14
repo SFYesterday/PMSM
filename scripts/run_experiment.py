@@ -13,7 +13,7 @@ SRC = ROOT / "src"
 if SRC.exists() and str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
-DEFAULT_MODULE = "pmsm.papers.preindl_2013_mp_dsc"
+DEFAULT_MODULE = "pmsm.papers.basic_fcs_mpc"
 
 
 def main() -> None:
@@ -21,7 +21,7 @@ def main() -> None:
     parser.add_argument(
         "--module",
         default=DEFAULT_MODULE,
-        help="要运行的模块路径，例如 pmsm.papers.preindl_2013_mp_dsc",
+        help="要运行的模块路径，例如 pmsm.papers.basic_fcs_mpc",
     )
     args = parser.parse_args()
     module = import_module(args.module)

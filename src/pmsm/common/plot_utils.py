@@ -20,8 +20,10 @@ def plot_mp_dsc_results(
     id_log: np.ndarray,
     iq_log: np.ndarray,
     motor_params: MotorParams,
-) -> None:
-    plt.figure(figsize=(10, 12), facecolor="white")
+    save_path: str | Path | None = None,
+    show: bool = True,
+):
+    fig = plt.figure(figsize=(10, 12), facecolor="white")
 
     plt.subplot(4, 1, 1)
     plt.plot(time, w_ref_log * (60 / (2 * math.pi)), "r--", linewidth=1.5, label="Reference")
@@ -60,8 +62,17 @@ def plot_mp_dsc_results(
     plt.xlim([-10, 2])
     plt.ylim([0, 12])
 
-    plt.tight_layout()
-    plt.show()
+    fig.tight_layout()
+
+    if save_path is not None:
+        save_path = Path(save_path)
+        save_path.parent.mkdir(parents=True, exist_ok=True)
+        fig.savefig(save_path, dpi=200, bbox_inches="tight")
+
+    if show:
+        plt.show()
+
+    return fig
 
 
 def plot_basic_fcs_mpc_results(
