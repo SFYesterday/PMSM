@@ -1,8 +1,9 @@
-"""统一的画图工具（波形、频谱等）。"""
+"""统一的绘图工具。"""
 
 from __future__ import annotations
 
 import math
+from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -61,3 +62,58 @@ def plot_mp_dsc_results(
 
     plt.tight_layout()
     plt.show()
+
+
+def plot_basic_fcs_mpc_results(
+    time: np.ndarray,
+    id_ref_log: np.ndarray,
+    iq_ref_log: np.ndarray,
+    id_log: np.ndarray,
+    iq_log: np.ndarray,
+    w_log: np.ndarray,
+    te_log: np.ndarray,
+    switch_idx_log: np.ndarray,
+    save_path: str | Path | None = None,
+    show: bool = True,
+):
+    fig, axes = plt.subplots(4, 1, figsize=(10, 12), facecolor="white", sharex=True)
+
+    axes[0].plot(time, id_ref_log, "r--", linewidth=1.2, label="i_d*")
+    axes[0].plot(time, id_log, "b", linewidth=1.2, label="i_d")
+    axes[0].plot(time, iq_ref_log, "m--", linewidth=1.2, label="i_q*")
+    axes[0].plot(time, iq_log, "g", linewidth=1.2, label="i_q")
+    axes[0].set_ylabel("Current (A)")
+    axes[0].set_title("Basic FCS-MPC Current Tracking")
+    axes[0].legend(loc="best")
+    axes[0].grid(True)
+
+    axes[1].plot(time, iq_ref_log - iq_log, "k", linewidth=1.1, label="i_q error")
+    axes[1].plot(time, id_ref_log - id_log, "c", linewidth=1.1, label="i_d error")
+    axes[1].set_ylabel("Error (A)")
+    axes[1].legend(loc="best")
+    axes[1].grid(True)
+
+    axes[2].plot(time, te_log, color="tab:orange", linewidth=1.2, label="Electromagnetic torque")
+    axes[2].plot(time, w_log, color="tab:blue", linewidth=1.2, label="Mechanical speed")
+    axes[2].set_ylabel("Torque / rpm")
+    axes[2].legend(loc="best")
+    axes[2].grid(True)
+
+    axes[3].step(time, switch_idx_log, where="post", color="tab:purple", linewidth=1.0, label="Switch index")
+    axes[3].set_xlabel("Time (s)")
+    axes[3].set_ylabel("State")
+    axes[3].set_yticks(range(8))
+    axes[3].legend(loc="best")
+    axes[3].grid(True)
+
+    fig.tight_layout()
+
+    if save_path is not None:
+        save_path = Path(save_path)
+        save_path.parent.mkdir(parents=True, exist_ok=True)
+        fig.savefig(save_path, dpi=200, bbox_inches="tight")
+
+    if show:
+        plt.show()
+
+    return fig

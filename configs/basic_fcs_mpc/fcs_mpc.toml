@@ -1,0 +1,25 @@
+[simulation]
+Ts = 0.0001
+T_sim = 0.2
+Udc = 200.0
+Ir_max = 10.0
+load_torque = 2.0
+
+[motor]
+Ld = 0.012
+Lq = 0.02
+Rs = 0.636
+psi_pm = 0.088
+p = 5
+J = 0.001
+B_fric = 0.0017
+
+[controller]
+lambda_id = 1.0
+lambda_iq = 1.0
+lambda_sw = 0.0
+id_ref_default = 0.0
+
+[references]
+iq_ref = 8.0
+id_ref = 0.0
